@@ -34,7 +34,7 @@ class ExSearch_Plugin implements Typecho_Plugin_Interface
 
         // 创建表
         $dbname =$db->getPrefix() . 'exsearch';
-        $sql = "SHOW TABLES LIKE '%" . $dbname . "%'";
+        $sql = "SELECT * FROM sqlite_master WHERE type='table' AND name='".$dbname."'";
         if (count($db->fetchAll($sql)) == 0) {
             $sql = '
             DROP TABLE IF EXISTS `'.$dbname.'`;
@@ -43,7 +43,7 @@ class ExSearch_Plugin implements Typecho_Plugin_Interface
                 `key` char(32) not null,
                 `data` longtext,
                 primary key (`id`)
-            ) default charset=utf8';
+            )';
  
             $sqls = explode(';', $sql);
             foreach ($sqls as $sql) {
@@ -179,7 +179,7 @@ class ExSearch_Plugin implements Typecho_Plugin_Interface
     {
         $db = Typecho_Db::get();
         $dbname = $db->getPrefix() . 'exsearch';
-        $sql = "SHOW TABLES LIKE '%" . $dbname . "%'";
+        $sql = "SELECT * FROM sqlite_master WHERE type='table' AND name='".$dbname."'";
         if(count($db->fetchAll($sql)) != 0){
             $db->query($db->delete('table.exsearch')->where('id >= ?', 0));
         }
